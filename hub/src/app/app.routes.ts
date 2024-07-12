@@ -17,6 +17,15 @@ const APP_ROUTES: Routes = [
         exposedModule: './Routes',
       }),
   },
+  {
+    path: 'remote2',
+    loadChildren: () =>
+      loadRemoteModule({
+        type: 'manifest',
+        remoteName: 'remote2',
+        exposedModule: './Routes',
+      }),
+  },
 ];
 
 export default APP_ROUTES;

@@ -132,8 +132,11 @@
             "tsConfig": "projects/remote1/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/remote1/src/favicon.ico",
-              "projects/remote1/src/assets"
+              {
+                "glob": "**/*",
+                "input": "projects/remote1/public",
+                "output": "."
+              }
             ],
             "styles": ["projects/remote1/src/styles.scss"],
             "scripts": [],
@@ -200,8 +203,10 @@
             "tsConfig": "projects/remote1/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/remote1/src/favicon.ico",
-              "projects/remote1/src/assets"
+              {
+                "glob": "**/*",
+                "input": "projects/remote1/public"
+              }
             ],
             "styles": ["projects/remote1/src/styles.scss"],
             "scripts": []
@@ -244,6 +249,106 @@
           "options": {
             "tsConfig": "projects/shared/tsconfig.spec.json",
             "polyfills": ["zone.js", "zone.js/testing"]
+          }
+        }
+      }
+    },
+    "remote2": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/remote2",
+      "sourceRoot": "projects/remote2/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "dist/remote2",
+            "index": "projects/remote2/src/index.html",
+            "polyfills": ["zone.js"],
+            "tsConfig": "projects/remote2/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/remote2/public",
+                "output": "."
+              }
+            ],
+            "styles": ["projects/remote2/src/styles.scss"],
+            "scripts": [],
+            "main": "projects/remote2/src/main.ts",
+            "extraWebpackConfig": "projects/remote2/webpack.config.js",
+            "commonChunk": false
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
+              "outputHashing": "all",
+              "extraWebpackConfig": "projects/remote2/webpack.prod.config.js"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "remote2:build:production",
+              "extraWebpackConfig": "projects/remote2/webpack.prod.config.js"
+            },
+            "development": {
+              "buildTarget": "remote2:build:development"
+            }
+          },
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 4202,
+            "publicHost": "http://localhost:4202",
+            "extraWebpackConfig": "projects/remote2/webpack.config.js"
+          }
+        },
+        "extract-i18n": {
+          "builder": "ngx-build-plus:extract-i18n",
+          "options": {
+            "buildTarget": "remote2:build",
+            "extraWebpackConfig": "projects/remote2/webpack.config.js"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig": "projects/remote2/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/remote2/public"
+              }
+            ],
+            "styles": ["projects/remote2/src/styles.scss"],
+            "scripts": []
           }
         }
       }
